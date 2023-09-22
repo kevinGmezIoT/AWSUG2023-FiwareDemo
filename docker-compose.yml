@@ -1,0 +1,150 @@
+# Docker Compose para Workshop AWS UG Conf 2023
+# Ponencia: "FIWARE: El Framework Open Source para Ciudades Inteligentes"
+# Autor: Kevin Gómez Villanueva
+
+# Descripción:
+# Este archivo Docker Compose se utiliza para orquestar varios servicios esenciales para el desarrollo
+# de aplicaciones relacionadas con la gestión de datos en Ciudades Inteligentes utilizando FIWARE,
+# un framework de código abierto. Los servicios incluyen un servidor Orion-LD, un agente IoT, el servidor
+# Draco para procesamiento de datos, y una instancia de MongoDB como base de datos.
+#
+# Estos servicios están configurados para funcionar en una red privada y pueden desplegarse fácilmente
+# en un entorno de desarrollo o producción. Cada servicio se ha configurado con las variables de entorno
+# necesarias y se han establecido dependencias entre ellos según sea necesario.
+#
+# Esta configuración se utiliza como parte del taller AWS UG Conf 2023 y sirve como un ejemplo de cómo
+# implementar una infraestructura de datos para Ciudades Inteligentes utilizando tecnologías de código abierto.
+
+version: "3.8"
+services:  
+  orion:
+    restart: always
+    labels:
+      org.fiware: ${ORG_NAME}
+    image: fiware/orion-ld:${ORION_LD_VERSION}
+    hostname: orion
+    container_name: fiware-orion-awsug
+    depends_on:
+      - mongo-db
+    environment:
+          ORIONLD_MONGO_USER: ${MONGO_DB_USER}
+          ORIONLD_MONGO_PASSWORD: ${MONGO_DB_PASS}
+          ORIONLD_CORS_ALLOWED_ORIGIN: __ALL
+          corsOrigin: __ALL
+          ORIONLD_CORS_MAX_AGE: 86400
+    networks:
+      awsug-net:
+        ipv4_address: 172.18.4.3
+    ports:
+      - "${ORION_LD_PORT}:${ORION_LD_PORT}"
+    command: -dbhost ${MONGO_DB_HOST} -dbuser  ${MONGO_DB_USER} -dbpwd ${MONGO_DB_PASS} -logLevel DEBUG -forwarding
+    healthcheck:
+      test: curl --fail -s http://orion:${ORION_LD_PORT}/version || exit 1
+      interval: 5s
+
+  iot-agent:
+    restart: always
+    labels:
+      org.fiware: ${ORG_NAME}
+    image: fiware/iotagent-json:${JSON_VERSION}
+    hostname: iot-agent
+    container_name: fiware-iot-agent-awsug
+    depends_on:
+      - mongo-db
+    networks:
+      awsug-net:
+        ipv4_address: 172.18.4.4
+    expose:
+      - "${IOTA_NORTH_PORT}"
+      - "${IOTA_SOUTH_PORT}"
+    ports:
+      - "${IOTA_NORTH_PORT}:${IOTA_NORTH_PORT}"
+      - "${IOTA_SOUTH_PORT}:${IOTA_SOUTH_PORT}"
+    environment:
+      - IOTA_NORTH_PORT=${IOTA_NORTH_PORT}
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=true
+      - IOTA_AUTOCAST=true
+      - IOTA_MONGO_HOST=${MONGO_DB_HOST}
+      - IOTA_MONGO_PORT=${MONGO_DB_PORT}
+      - IOTA_MONGO_USER=${MONGO_DB_USER}
+      - IOTA_MONGO_PASSWORD=${MONGO_DB_PASS}
+      - IOTA_MONGO_DB=admin
+      - IOTA_HTTP_PORT=${IOTA_SOUTH_PORT}
+      - IOTA_PROVIDER_URL=http://iot-agent:${IOTA_NORTH_PORT}
+      - IOTA_CB_NGSI_VERSION=ld
+      - |
+          IOTA_JSON_LD_CONTEXT=
+          https://raw.githubusercontent.com/smart-data-models/dataModel.Device/master/context.jsonld,
+          https://raw.githubusercontent.com/smart-data-models/dataModel.Environment/master/context.jsonld,
+          https://raw.githubusercontent.com/smart-data-models/dataModel.OCF/master/context.jsonld,
+          https://raw.githubusercontent.com/smart-data-models/dataModel.Agrifood/master/context.jsonld,
+          https://raw.githubusercontent.com/smart-data-models/dataModel.Organization/master/context.jsonld,
+          https://raw.githubusercontent.com/smart-data-models/dataModel.SAREF/master/context.jsonld
+      - IOTA_FALLBACK_TENANT=${IOTA_FALLBACK_TENANT}
+      - IOTA_FALLBACK_PATH=${IOTA_FALLBACK_PATH}
+      - IOTA_DEFAULT_RESOURCE=/iot/json
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=${ORION_LD_PORT}
+    
+  draco:
+    restart: always
+    labels:
+      org.fiware: ${ORG_NAME}
+    image: fiware/draco:${DRACO_VERSION}
+    hostname: draco
+    container_name: fiware-draco-awsug
+    networks:
+      awsug-net:
+        ipv4_address: 172.18.4.5
+    environment:
+      - NIFI_WEB_HTTP_PORT=${DRACO_API_PORT}
+    expose:
+      - "${DRACO_SUBSCRIPTION_PORT}"
+      - "${DRACO_API_PORT}"
+    ports:
+      - "${DRACO_API_PORT}:${DRACO_API_PORT}"
+      - "${DRACO_SUBSCRIPTION_PORT}:${DRACO_SUBSCRIPTION_PORT}"
+    healthcheck:
+      test: curl --fail -s http://draco:${DRACO_API_PORT}/nifi-api/system-diagnostics || exit 1
+      start_period: 1m
+   
+  mongo-db:
+    restart: always
+    labels:
+      org.fiware: ${ORG_NAME}
+    image: mongo:4.4
+    hostname: ${MONGO_DB_HOST}
+    container_name: db-mongo-awsug
+    expose:
+      - ${MONGO_DB_PORT}
+    ports:
+      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
+    networks:
+      awsug-net:
+        ipv4_address: 172.18.4.7
+    environment:
+      AUTH: yes
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASS}
+    volumes:
+      - mongo-db:/data/db
+      - mongo-config:/data/configdb
+    healthcheck:
+      test: |
+        mongo --quiet 127.0.1.1/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1    
+      interval: 5s
+
+networks:
+  awsug-net:
+    labels:
+      org.fiware: ${ORG_NAME}
+    ipam:
+      config:
+        - subnet: 172.18.4.0/24
+
+volumes:
+  mongo-db: ~
+  mongo-config: ~
+  grafana-data:
