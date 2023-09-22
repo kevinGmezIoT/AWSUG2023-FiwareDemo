@@ -136,6 +136,27 @@ services:
         mongo --quiet 127.0.1.1/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1    
       interval: 5s
 
+  postgres-db:
+    restart: always
+    labels:
+      org.fiware: ${ORG_NAME}
+    image: postgres
+    hostname: ${POSTGRES_HOST}
+    container_name: db-postgres-awsug
+    networks:
+      awsug-net:
+        ipv4_address: 172.18.4.8
+    expose:
+      - "${POSTGRES_PORT}"
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    environment:
+      - "POSTGRES_PASSWORD=${POSTGRES_PASS}"
+      - "POSTGRES_USER=${POSTGRES_USER}"
+      - "POSTGRES_DB=${POSTGRES_DB}"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
 networks:
   awsug-net:
     labels:
@@ -147,4 +168,5 @@ networks:
 volumes:
   mongo-db: ~
   mongo-config: ~
+  postgres-db: ~
   grafana-data:
