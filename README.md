@@ -140,7 +140,7 @@ La última acción en NiFi es seleccionar a los tres bloques más grandes usando
 
 Los siguientes pasos se pueden realizar en POSTMAN o con comandos cUrl
 
-# Pruebas
+## Pruebas
 
 Prueba de Orion:
 ```bash
@@ -152,7 +152,7 @@ Prueba de IoT Agent:
 curl --location 'http://<URL-EC2-Instancia>:4041/iot/about'
 ```
 
-# Pasos para establecer el sistema completo
+## Pasos para establecer el sistema completo
 
 1. Crear Grupo de Servicio:
 ```bash
@@ -172,3 +172,626 @@ curl --location 'http://<URL-EC2-Instancia>:4041/iot/services' \
 }'
 ```
 
+2. Crear entidad de la Organización:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
+--header 'Content-Type: application/ld+json' \
+--header 'Accept: application/ld+json' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data-raw '{
+    "id": "urn:ngsi-ld:Organization:organization123456789",
+    "type": "Organization",
+    "name": {
+        "type": "Property",
+        "value": "Compañía AgriFood"
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": {
+            "type": "Point",
+            "coordinates": [
+                -12.108167,
+                -77.007356
+            ]
+        }
+    },
+    "address": {
+        "type": "Property",
+        "value": {
+            "addressCountry": "Peru",
+            "addressRegion": "Lima",
+            "District": "Surco",
+            "postalCode": "15038",
+            "streetAddress": "Av. Alfredo Benavides"
+        }
+    },
+    "url": {
+        "type": "Property",
+        "value": "https://www.example-organization-homepage.com"
+    },
+    "legalName": {
+        "type": "Property",
+        "value": "Agrifood Inc."
+    },
+    "taxID": {
+        "type": "Property",
+        "value": "123456789"
+    },
+    "@context": [
+        "https://raw.githubusercontent.com/smart-data-models/dataModel.Organization/master/context.jsonld"
+    ]
+
+}'
+```
+
+3. Crear entidad de Supervisor:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
+--header 'Content-Type: application/ld+json' \
+--header 'Accept: application/ld+json' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data-raw '{
+    "id": "urn:ngsi-ld:Person:person123456789",
+    "type": "Person",
+    "name": {
+        "type": "Property",
+        "value": "123456789"
+    },
+    "alternateName": {
+        "type": "Property",
+        "value": "Supervisor Granja 123456789"
+    },
+    "description": {
+        "type": "Property",
+        "value": "Supervisor de Granja 123456789"
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": {
+            "type": "Point",
+            "coordinates": [
+                -12.108167,
+                -77.007356
+            ]
+        }
+    },
+    "address": {
+        "type": "Property",
+        "value": {
+            "addressCountry": "Peru",
+            "addressRegion": "Lima",
+            "District": "Surco",
+            "postalCode": "15038",
+            "streetAddress": "Av. Alfredo Benavides"
+        }
+    },
+    "areaServed": {
+        "type": "Property",
+        "value": "Sudamérica"
+    },
+    "givenName": {
+        "type": "Property",
+        "value": "Felipe"
+    },
+    "additionalName": {
+        "type": "Property",
+        "value": "Ignacio"
+    },
+    "familyName": {
+        "type": "Property",
+        "value": "Vera Cruzado"
+    },
+    "telephone": {
+        "type": "Property",
+        "value": "+51974153334"
+    },
+    "email": {
+        "type": "Property",
+        "value": "info@agrifood.inc"
+    },
+    "owner":{
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Organization:organization123456789"
+    },
+    "@context": [
+    "https://raw.githubusercontent.com/smart-data-models/dataModel.Organization/master/context.jsonld"
+    ]
+}'
+```
+
+4. Crear entidad de la granja:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
+--header 'Content-Type: application/ld+json' \
+--header 'Accept: application/ld+json' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data-raw '{
+    "id": "urn:ngsi-ld:AgriFarm:agrifarm1234",
+    "type": "AgriFarm",
+    "address": {
+        "type": "Property",
+        "value": {
+            "addressCountry": "Peru",
+            "addressRegion": "Lima",
+            "District": "Surco",
+            "postalCode": "15038",
+            "streetAddress": "Av. Alfredo Benavides"
+        }
+    },
+    "description": {
+        "type": "Property",
+        "value": "Granja de producción de uvas"
+    },
+    "hasAgriParcel": {
+        "type": "Relationship",
+        "object": [
+            "urn:ngsi-ld:AgriParcel:agriparcel1234",
+            "urn:ngsi-ld:AgriParcel:agriparcel1235"
+        ]
+    },
+    "landLocation": {
+        "type": "GeoProperty",
+        "value": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [
+                        100,
+                        0
+                    ],
+                    [
+                        101,
+                        0
+                    ],
+                    [
+                        101,
+                        1
+                    ],
+                    [
+                        100,
+                        1
+                    ],
+                    [
+                        100,
+                        0
+                    ]
+                ]
+            ]
+        }
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": {
+            "type": "Point",
+            "coordinates": [
+                -12.108167,
+                -77.007356
+            ]
+        }
+    },
+    "name": {
+        "type": "Property",
+        "value": "Granja principal"
+    },
+    "ownedBy": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Person:person123456789"
+    },
+    "seeAlso": {
+        "type": "Property",
+        "value": [
+            "https://example.org/concept/farm",
+            "https://datamodel.org/example/farm"
+        ]
+    },
+    "@context": [
+        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld",
+        "https://raw.githubusercontent.com/smart-data-models/dataModel.Agrifood/master/context.jsonld"
+    ]
+}'
+```
+
+5. Crear entidad de la parcela:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
+--header 'Content-Type: application/ld+json' \
+--header 'Accept: application/ld+json' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data-raw '{
+    "id": "urn:ngsi-ld:AgriParcel:agriparcel1234",
+    "type": "AgriParcel",
+    "area": {
+        "type": "Property",
+        "value": 200
+    },
+    "belongsTo": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:AgriFarm:agrifarm1234"
+    },
+    "category": {
+        "type": "Property",
+        "value": "viñedo"
+    },
+    "cropStatus": {
+        "type": "Property",
+        "value": "growing"
+    },
+    "description": {
+        "type": "Property",
+        "value": "Spring grapes"
+    },
+    "hasAirQualityObserved": {
+        "type": "Relationship",
+        "object": [
+        "urn:ngsi-ld:AirQualityObserved:airqualityobserved123"
+        ]
+    },
+    "hasDevice": {
+        "type": "Relationship",
+        "object": [
+        "urn:ngsi-ld:Device:device123456",
+        "urn:ngsi-ld:Device:device123457"
+        ]
+    },
+    "lastPlantedAt": {
+        "type": "Property",
+        "value": {
+        "@type": "DateTime",
+        "@value": "2023-08-22T10:18:16Z"
+        }
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+            [
+                100,
+                0
+            ],
+            [
+                101,
+                0
+            ],
+            [
+                101,
+                1
+            ],
+            [
+                100,
+                1
+            ],
+            [
+                100,
+                0
+            ]
+            ]
+        ]
+        }
+    },
+    "ownedBy": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Person:person123456789"
+    },
+    "@context": [
+        "https://raw.githubusercontent.com/smart-data-models/dataModel.Agrifood/master/context.jsonld"
+    ]
+}'
+```
+
+6. Crear entidad de la fuente de Calidad de Aire:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
+--header 'Content-Type: application/ld+json' \
+--header 'Accept: application/ld+json' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data-raw '{
+    "id": "urn:ngsi-ld:AirQualityObserved:airqualityobserved123",
+    "type": "AirQualityObserved",
+    "co": {
+        "type": "Property",
+        "value": 500,
+        "unitCode": "GP"
+    },
+    "coLevel": {
+        "type": "Property",
+        "value": "moderate"
+    },
+    "no": {
+        "type": "Property",
+        "value": 45,
+        "unitCode": "GQ"
+    },
+    "no2": {
+        "type": "Property",
+        "value": 69,
+        "unitCode": "GQ"
+    },
+    "nox": {
+        "type": "Property",
+        "value": 139,
+        "unitCode": "GQ"
+    },
+    "so2": {
+        "type": "Property",
+        "value": 11,
+        "unitCode": "GQ"
+    },
+    "address": {
+        "type": "Property",
+        "value": {
+            "addressCountry": "Peru",
+            "addressRegion": "Lima",
+            "District": "Surco"
+        }
+    },
+    "airQualityIndex": {
+        "type": "Property",
+        "value": 65
+    },
+    "airQualityLevel": {
+        "type": "Property",
+        "value": "moderate"
+    },
+    "dateObserved": {
+        "type": "Property",
+        "value": "2016-03-15T11:00:00/2016-03-15T12:00:00"
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": {
+            "type": "Point",
+            "coordinates": [
+                -12.108167,
+                -77.007356
+            ]
+        }
+    },
+    "precipitation": {
+        "type": "Property",
+        "value": 0
+    },
+    "relativeHumidity": {
+        "type": "Property",
+        "value": 0.54
+    },
+    "reliability": {
+        "type": "Property",
+        "value": 0.7
+    },
+    "source": {
+        "type": "Property",
+        "value": "https://www.weatherapi.com/"
+    },
+    "temperature": {
+        "type": "Property",
+        "value": 16.2
+    },
+    "typeOfLocation": {
+        "type": "Property",
+        "value": "outdoor"
+    },
+    "windDirection": {
+        "type": "Property",
+        "value": 186
+    },
+    "windSpeed": {
+        "type": "Property",
+        "value": 0.64
+    },
+    "@context": [
+        "https://raw.githubusercontent.com/smart-data-models/dataModel.Environment/master/context.jsonld"
+    ]
+}'
+```
+
+7. Crear entidad del dispositivo:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
+--header 'Content-Type: application/ld+json' \
+--header 'Accept: application/ld+json' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data-raw '{
+    "id": "urn:ngsi-ld:Device:device123456",
+    "type": "Device",
+    "batteryLevel": {
+        "type": "Property",
+        "value": 0.75
+    },
+    "deviceCategory": {
+        "type": "Property",
+        "value": [
+        "sensor"
+        ]
+    },
+    "controlledAsset": {
+        "type": "Relationship",
+        "object": [
+        "urn:ngsi-ld:AgriParcel:agriparcel1234"
+        ]
+    },
+    "controlledProperty": {
+        "type": "Property",
+        "value": [
+        "humidity",
+        "temperature"
+        ]
+    },
+    "deviceState": {
+        "type": "Property",
+        "value": "ok"
+    },
+    "ipAddress": {
+        "type": "Property",
+        "value": [
+        "192.168.56.78"
+        ]
+    },
+    "serialNumber": {
+        "type": "Property",
+        "value": "123456"
+    },
+    "@context": [
+        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld",
+        "https://raw.githubusercontent.com/smart-data-models/dataModel.Device/master/context.jsonld"
+    ]
+}'
+```
+
+8. Inspeccionar que todos los dispositivos se encuentren registrados:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities?local=true&options=keyValues' \
+--header 'Link: <https://raw.githubusercontent.com/smart-data-models/dataModel.Device/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.Environment/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.OCF/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.Agrifood/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.Organization/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.SAREF/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--data ''
+```
+
+9. Aprovisionamiento de los sensores:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:4041/iot/devices' \
+--header 'fiware-service: awsug' \
+--header 'fiware-servicepath: /' \
+--header 'Content-Type: application/json' \
+--data '{
+  "devices": [
+    {
+      "device_id": "sensor-temperature-001",
+      "entity_name": "urn:ngsi-ld:Sensor:sensor-temperature-001",
+      "entity_type": "https://smartdatamodels.org/dataModel.SAREF/Sensor",
+      "timezone": "America/Lima",
+      "attributes": [
+        {
+            "object_id": "t",
+            "name": "hasSensingRange",
+            "type": "Property"
+        }
+      ],
+      "static_attributes": [
+        {
+            "name": "name",
+            "type": "Property",
+            "value": "Sensor Temperatura"
+        },
+        {
+            "name": "description",
+            "type": "Property",
+            "value": "Sensor de temperatura para suelos"
+        },
+        {
+            "name": "hasManufacturer",
+            "type": "Property",
+            "value": "Maxim Integrated"
+        },
+        {
+            "name": "hasSensorType",
+            "type": "Property",
+            "value": "Temperatura"
+        },
+        {
+            "name": "hasModel",
+            "type": "Property",
+            "value": "DS18B20"
+        },
+        {
+            "name": "isSubSystemOf",
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:Device:device123456"
+        }
+      ]
+    },
+    {
+      "device_id": "sensor-humidity-001",
+      "entity_name": "urn:ngsi-ld:Sensor:sensor-humidity-001",
+      "entity_type": "https://smartdatamodels.org/dataModel.SAREF/Sensor",
+      "timezone": "America/Lima",
+      "attributes": [
+        {
+            "object_id": "h",
+            "name": "hasSensingRange",
+            "type": "Property"
+        }
+      ],
+      "static_attributes": [
+        {
+            "name": "name",
+            "type": "Property",
+            "value": "Sensor Humedad"
+        },
+        {
+            "name": "description",
+            "type": "Property",
+            "value": "Sensor de humedad para suelos"
+        },
+        {
+            "name": "hasManufacturer",
+            "type": "Property",
+            "value": "Texas Instrument"
+        },
+        {
+            "name": "hasSensorType",
+            "type": "Property",
+            "value": "Humedad"
+        },
+        {
+            "name": "hasModel",
+            "type": "Property",
+            "value": "FC-28"
+        },
+        {
+            "name": "isSubSystemOf",
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:Device:device123456"
+        }
+      ]
+    }
+  ]
+}'
+```
+
+10. Suscripción de NiFi a ORION-LD:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/subscriptions/' \
+--header 'Content-Type: application/ld+json' \
+--header 'NGSILD-Tenant: awsug' \
+--data-raw '{
+  "description": "Notify Draco of all entity changes",
+  "type": "Subscription",
+  "entities" : [{"type" :"Sensor"}],
+  "notification": {
+    "format": "normalized",
+    "endpoint": {
+      "uri": "http://draco:5050/v2/notify",
+      "accept": "application/json"
+    }
+  },
+   "@context": "https://raw.githubusercontent.com/smart-data-models/dataModel.SAREF/master/context.jsonld"
+}'
+```
+
+11. Prueba de envío de dato de temperatura:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:7896/iot/json?k=f6ad88cb-fbcd-413e-b71e-df3147943718&i=sensor-temperature-001' \
+--header 'Content-Type: application/json' \
+--data '{ "t": 24}'
+```
+
+12. Prueba de envío de dato de humedad:
+```bash
+curl --location 'http://<URL-EC2-Instancia>:7896/iot/json?k=f6ad88cb-fbcd-413e-b71e-df3147943718&i=sensor-humidity-001' \
+--header 'Content-Type: application/json' \
+--data '{ "h": 53}'
+```
+
+## Resultado
+
+Luego de realizar estos pasos. Al conectarse a la BD PostgreSQL veremos que se encuentran los datos enviados.
+
+![PostgreSQL result](images/Postgres_resultado.jpg)
