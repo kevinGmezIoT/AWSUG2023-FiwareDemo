@@ -13,7 +13,7 @@
 # necesarias y se han establecido dependencias entre ellos según sea necesario.
 #
 # Esta configuración sirve como un ejemplo de cómo implementar una infraestructura de datos para Ciudades Inteligentes 
-#utilizando tecnologías de código abierto.
+# utilizando tecnologías de código abierto.
 
 version: "3.8"
 services:  
