@@ -1,6 +1,6 @@
 # FIWARE Demo Repository
 
-Este repositorio contiene un proyecto de demostración que muestra las capacidades de FIWARE presentado en el evento AWS UG Conf 2023. Los usuarios pueden desplegar fácilmente los servicios de FIWARE utilizando contenedores Docker. Los servicios incluidos en esta demo son Orion-ld, IoT Agent for JSON, Draco, una base de datos MongoDB y una PostgreSQL. La demo simula una granja con su campo siendo monitoreado por un dispositivo equipado con sensores de temperatura y humedad.
+Este repositorio contiene un proyecto de demostración que muestra las capacidades de FIWARE. Los usuarios pueden desplegar fácilmente los servicios de FIWARE utilizando contenedores Docker. Los servicios incluidos en esta demo son Orion-ld, IoT Agent for JSON, Draco, una base de datos MongoDB y una PostgreSQL. La demo simula una granja con su campo siendo monitoreado por un dispositivo equipado con sensores de temperatura y humedad.
 
 ## Modelo de Datos
 
@@ -58,11 +58,11 @@ Para configurar y ejecutar la demo, siga estos pasos:
 1. Clone este repositorio en su máquina local:
 
    ```bash
-   git clone https://github.com/kevinGmezIoT/AWSUG2023-FiwareDemo.git
+   git clone https://github.com/kevinGmezIoT/FiwareDemo_Esp_byKevinG.git
    ```
 2. Navegue al directorio del proyecto:
    ```bash
-   cd AWSUG2023-FiwareDemo
+   cd FiwareDemo_Esp_byKevinG.git
    ```
 3. Cambie al usuario root (sudo):
    ```bash
@@ -792,6 +792,6 @@ curl --location 'http://<URL-EC2-Instancia>:7896/iot/json?k=f6ad88cb-fbcd-413e-b
 
 ## Resultado
 
-Luego de realizar estos pasos. Al conectarse a la BD PostgreSQL veremos que se encuentran los datos enviados.
+Luego de realizar estos pasos. Al conectarse a la BD PostgreSQL veremos que se encuentran los datos enviados. Se ha utilizado HeidiSQL para la visualización de la BD.
 
 ![PostgreSQL result](images/Postgres_resultado.jpg)
