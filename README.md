@@ -125,7 +125,7 @@ Seleccionar la pestaña __PROPERTIES__ y modificar las propiedades:
 
 - NGSI Version: Cambiar de v2 a ld. Esto porque utilizamos NGSI-LD.
 - Data Model: Elegir db-by-entity-type. Esto le asignará el nombre de la entidad a la tabla generada.
-- Default Service: Colocar __awsug__. Este es el nombre de servicio elegido para esta demo.
+- Default Service: Colocar __demo__. Este es el nombre de servicio elegido para esta demo.
 - Default Service path: Colocar solo /. Este es el path más simple para esta demo.
 
 Finalmente clic en __APPLY__
@@ -157,7 +157,7 @@ curl --location 'http://<URL-EC2-Instancia>:4041/iot/about'
 1. Crear Grupo de Servicio:
 ```bash
 curl --location 'http://<URL-EC2-Instancia>:4041/iot/services' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -177,7 +177,7 @@ curl --location 'http://<URL-EC2-Instancia>:4041/iot/services' \
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 --header 'Content-Type: application/ld+json' \
 --header 'Accept: application/ld+json' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data-raw '{
     "id": "urn:ngsi-ld:Organization:organization123456789",
@@ -230,7 +230,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 --header 'Content-Type: application/ld+json' \
 --header 'Accept: application/ld+json' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data-raw '{
     "id": "urn:ngsi-ld:Person:person123456789",
@@ -306,7 +306,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 --header 'Content-Type: application/ld+json' \
 --header 'Accept: application/ld+json' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data-raw '{
     "id": "urn:ngsi-ld:AgriFarm:agrifarm1234",
@@ -399,7 +399,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 --header 'Content-Type: application/ld+json' \
 --header 'Accept: application/ld+json' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data-raw '{
     "id": "urn:ngsi-ld:AgriParcel:agriparcel1234",
@@ -489,7 +489,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 --header 'Content-Type: application/ld+json' \
 --header 'Accept: application/ld+json' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data-raw '{
     "id": "urn:ngsi-ld:AirQualityObserved:airqualityobserved123",
@@ -596,7 +596,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 --header 'Content-Type: application/ld+json' \
 --header 'Accept: application/ld+json' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data-raw '{
     "id": "urn:ngsi-ld:Device:device123456",
@@ -649,7 +649,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities/' \
 ```bash
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities?local=true&options=keyValues' \
 --header 'Link: <https://raw.githubusercontent.com/smart-data-models/dataModel.Device/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.Environment/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.OCF/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.Agrifood/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.Organization/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", <https://raw.githubusercontent.com/smart-data-models/dataModel.SAREF/master/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --data ''
 ```
@@ -657,7 +657,7 @@ curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/entities?local=true&
 9. Aprovisionamiento de los sensores:
 ```bash
 curl --location 'http://<URL-EC2-Instancia>:4041/iot/devices' \
---header 'fiware-service: awsug' \
+--header 'fiware-service: demo' \
 --header 'fiware-servicepath: /' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -760,7 +760,7 @@ curl --location 'http://<URL-EC2-Instancia>:4041/iot/devices' \
 ```bash
 curl --location 'http://<URL-EC2-Instancia>:1026/ngsi-ld/v1/subscriptions/' \
 --header 'Content-Type: application/ld+json' \
---header 'NGSILD-Tenant: awsug' \
+--header 'NGSILD-Tenant: demo' \
 --data-raw '{
   "description": "Notify Draco of all entity changes",
   "type": "Subscription",
