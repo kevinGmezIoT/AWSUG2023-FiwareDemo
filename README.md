@@ -87,7 +87,7 @@ Para detener los contenedores:
 
 ## Configurar NiFi
 
-Para ingresar a la UI nos dirigimos a la dirección: http://__<URL-EC2-Instancia>__:9090/nifi
+Para ingresar a la UI nos dirigimos a la dirección: http://\<URL-EC2-Instancia\>:9090/nifi
 Aquí hacemos ubicar el mouse en __Template__ y arrastrar al espacio de trabajo.
 
 ![NIFI 1](images/Nifi_1.jpg)
