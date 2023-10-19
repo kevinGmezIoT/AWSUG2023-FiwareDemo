@@ -62,7 +62,7 @@ Para configurar y ejecutar la demo, siga estos pasos:
    ```
 2. Navegue al directorio del proyecto:
    ```bash
-   cd FiwareDemo_Esp_byKevinG.git
+   cd FiwareDemo_Esp_byKevinG
    ```
 3. Cambie al usuario root (sudo):
    ```bash
@@ -87,7 +87,7 @@ Para detener los contenedores:
 
 ## Configurar NiFi
 
-Para ingresar a la UI nos dirigimos a la dirección: http://<URL-EC2-Instancia>:9090/nifi
+Para ingresar a la UI nos dirigimos a la dirección: http://__<URL-EC2-Instancia>__:9090/nifi
 Aquí hacemos ubicar el mouse en __Template__ y arrastrar al espacio de trabajo.
 
 ![NIFI 1](images/Nifi_1.jpg)
