@@ -27,6 +27,7 @@ services:
     depends_on:
       - mongo-db
     environment:
+          ORIONLD_MONGO_HOST: ${MONGO_DB_HOST}
           ORIONLD_MONGO_USER: ${MONGO_DB_USER}
           ORIONLD_MONGO_PASSWORD: ${MONGO_DB_PASS}
           ORIONLD_CORS_ALLOWED_ORIGIN: __ALL
@@ -37,7 +38,7 @@ services:
         ipv4_address: 172.18.4.3
     ports:
       - "${ORION_LD_PORT}:${ORION_LD_PORT}"
-    command: -dbhost ${MONGO_DB_HOST} -dbuser  ${MONGO_DB_USER} -dbpwd ${MONGO_DB_PASS} -logLevel DEBUG -forwarding
+    command: -dbhost ${MONGO_DB_HOST} -dbuser ${MONGO_DB_USER} -dbpwd ${MONGO_DB_PASS} -logLevel DEBUG -forwarding
     healthcheck:
       test: curl --fail -s http://orion:${ORION_LD_PORT}/version || exit 1
       interval: 5s
