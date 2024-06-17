@@ -703,7 +703,7 @@ curl --location 'http://<URL-EC2-Instancia>:4041/iot/devices' \
         {
             "name": "isSubSystemOf",
             "type": "Relationship",
-            "object": "urn:ngsi-ld:Device:device123456"
+            "value": "urn:ngsi-ld:Device:device123456"
         }
       ]
     },
@@ -748,7 +748,7 @@ curl --location 'http://<URL-EC2-Instancia>:4041/iot/devices' \
         {
             "name": "isSubSystemOf",
             "type": "Relationship",
-            "object": "urn:ngsi-ld:Device:device123456"
+            "value": "urn:ngsi-ld:Device:device123456"
         }
       ]
     }
